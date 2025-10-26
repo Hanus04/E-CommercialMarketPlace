@@ -1,0 +1,43 @@
+{
+  "customers": [
+    { "customerId": 1, "userName": "tranminh", "password": "123456", "email": "minh@example.com", "phone": "0987654321", "address": "Hà Nội" },
+    { "customerId": 2, "userName": "ngocanh", "password": "123456", "email": "anh@example.com", "phone": "0912345678", "address": "TP.HCM" }
+  ],
+  "sellers": [
+    { "sellerId": 1, "userName": "shopEcod", "password": "abc123", "email": "ecod@example.com", "phone": "0901112222", "address": "Đà Nẵng" }
+  ],
+  "categories": [
+    { "categoryId": 1, "categoryName": "Bảo hộ lao động" },
+    { "categoryId": 2, "categoryName": "Dụng cụ an toàn" }
+  ],
+  "products": [
+    { "productId": 1, "name": "Mũ bảo hộ", "description": "Mũ bảo hộ nhựa ABS cao cấp", "price": 150000, "stock": 50, "imageUrl": "helmet.jpg", "CategorycategoryId": 1 },
+    { "productId": 2, "name": "Găng tay chống cắt", "description": "Găng tay sợi chống cắt cấp 5", "price": 80000, "stock": 100, "imageUrl": "glove.jpg", "CategorycategoryId": 2 }
+  ],
+  "carts": [
+    { "cartId": 1, "totalPrice": 230000, "CustomercustomerId": 1 }
+  ],
+  "cartItems": [
+    { "cartItemId": 1, "quantity": 1, "subtotal": 150000, "CartcartId": 1, "ProductproductId": 1 },
+    { "cartItemId": 2, "quantity": 1, "subtotal": 80000, "CartcartId": 1, "ProductproductId": 2 }
+  ],
+  "vouchers": [
+    { "voucherId": 1, "code": "SALE10", "discountPercent": 10, "status": 1 }
+  ],
+  "orders": [
+    { "orderId": 1, "orderDate": "2025-10-25", "status": "Đã thanh toán", "totalAmount": 207000, "CustomercustomerId": 1, "VouchervoucherId": 1 }
+  ],
+  "orderItems": [
+    { "orderItemId": 1, "quantity": 1, "price": 150000, "subtotal": 150000, "OrderorderId": 1, "ProductproductId": 1 },
+    { "orderItemId": 2, "quantity": 1, "price": 80000, "subtotal": 80000, "OrderorderId": 1, "ProductproductId": 2 }
+  ],
+  "payments": [
+    { "paymentId": 1, "method": "VNPay", "amount": 207000, "status": "Hoàn tất", "paymentDate": "2025-10-25", "OrderorderId": 1 }
+  ],
+  "reviews": [
+    { "reviewId": 1, "rating": 5, "comment": "Sản phẩm chất lượng!", "CustomercustomerId2": 1, "ProductproductId2": 1 }
+  ],
+  "messages": [
+    { "messageId": 1, "content": "Chào shop, còn hàng không?", "timestamp": "2025-10-25", "CustomercustomerId": 1, "SellersellerId": 1 }
+  ]
+}
