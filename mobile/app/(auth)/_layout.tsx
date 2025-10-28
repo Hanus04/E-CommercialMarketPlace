@@ -5,7 +5,7 @@ import { RootState } from "../../store/store"
 export default function AuthRoutesLayout() {
   const user = useSelector((state: RootState) => state.user.currentUser)
 
-  if (user) return <Redirect href="/(auth)/sign-in" />
+  if (user) return <Redirect href="/(tab)" />
 
   return <Stack screenOptions={{ headerShown: false }} />
 }

@@ -19,16 +19,16 @@ const initialState: UserState = {
 const USERS_URL = `${BASE_URL}/customers`;
 
 
-export const signIn = createAsyncThunk<
-  Customer,
-  { userName: string; password: string },
-  { rejectValue: string }
->("user/signIn", async ({ userName, password }, { rejectWithValue }) => {
-  const res = await fetch(`${USERS_URL}?userName=${userName}&password=${password}`)
-  const data = await res.json()
-  if (data.length === 0) return rejectWithValue("Sai tài khoản hoặc mật khẩu")
-  return data[0]
-})
+  export const signIn = createAsyncThunk<
+    Customer,
+    { userName: string; password: string },
+    { rejectValue: string }
+  >("user/signIn", async ({ userName, password }, { rejectWithValue }) => {
+    const res = await fetch(`${USERS_URL}?userName=${userName}&password=${password}`)
+    const data = await res.json()
+    if (data.length === 0) return rejectWithValue("Sai tài khoản hoặc mật khẩu")
+    return data[0]
+  })
 
 const userSlice = createSlice({
   name: "user",
@@ -54,6 +54,10 @@ const userSlice = createSlice({
       })
   },
 })
+
+
+
+
 
 export const { signOut } = userSlice.actions
 export default userSlice.reducer
