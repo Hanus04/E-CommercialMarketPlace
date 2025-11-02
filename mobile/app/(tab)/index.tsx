@@ -38,9 +38,7 @@ export default function HomeScreen() {
   return (
     <ScrollView
       style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+      
     >
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
