@@ -20,6 +20,12 @@ export interface Product {
   stock: number;
   imageUrl: string;
   categoryId: number;
+  rating: number;
+  shipping: string[];
+  freeReturn: boolean;
+  buyerProtection: boolean;
+  bestDeal: boolean;
+  shipToStore: boolean;
 }
 
 export interface Cart {
