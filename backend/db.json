@@ -61,7 +61,7 @@
 
 ,
   "carts": [
-    { "cartId": 1, "totalPrice": 230000, "CustomercustomerId": 1 }
+    { "cartId": 1, "totalPrice": 230000, "CustomerId": 1 }
   ],
   "cartItems": [
     { "cartItemId": 1, "quantity": 1, "subtotal": 150000, "CartcartId": 1, "ProductproductId": 1 },
@@ -74,8 +74,8 @@
     { "orderId": 1, "orderDate": "2025-10-25", "status": "Đã thanh toán", "totalAmount": 207000, "CustomercustomerId": 1, "VouchervoucherId": 1 }
   ],
   "orderItems": [
-    { "orderItemId": 1, "quantity": 1, "price": 150000, "subtotal": 150000, "OrderorderId": 1, "ProductproductId": 1 },
-    { "orderItemId": 2, "quantity": 1, "price": 80000, "subtotal": 80000, "OrderorderId": 1, "ProductproductId": 2 }
+    { "orderItemId": 1, "quantity": 1, "price": 150000, "subtotal": 150000, "OrderId": 1, "productId": 1 },
+    { "orderItemId": 2, "quantity": 1, "price": 80000, "subtotal": 80000, "OrderId": 1, "productId": 2 }
   ],
   "payments": [
     { "paymentId": 1, "method": "VNPay", "amount": 207000, "status": "Hoàn tất", "paymentDate": "2025-10-25", "OrderorderId": 1 }

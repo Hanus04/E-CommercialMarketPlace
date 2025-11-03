@@ -38,7 +38,10 @@ export default function HomeScreen() {
   return (
     <ScrollView
       style={styles.container}
-      
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -52,7 +55,12 @@ export default function HomeScreen() {
         </View>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity style={{ marginRight: 12 }}>
-            <Ionicons name="cart-outline" size={22} color="#000" />
+            <Ionicons
+              name="cart-outline"
+              size={22}
+              color="#000"
+              onPress={() => router.push("/checkout/Checkout")}
+            />
           </TouchableOpacity>
           <TouchableOpacity>
             <Image
@@ -72,21 +80,25 @@ export default function HomeScreen() {
       >
         {[
           {
+            id: 1,
             title: "Electronics",
             icon: require("@/assets/images/phone.png"),
             color: "#7B61FF",
           },
           {
+            id: 3,
             title: "Fashion",
             icon: require("@/assets/images/shoes.png"),
             color: "#4069E5",
           },
           {
+            id: 2,
             title: "Beauty",
             icon: require("@/assets/images/lipstick.png"),
             color: "#ED7C2C",
           },
           {
+            id: 4,
             title: "Fresh",
             icon: require("@/assets/images/avocado.png"),
             color: "#E05957",
@@ -95,6 +107,7 @@ export default function HomeScreen() {
           <TouchableOpacity
             key={index}
             style={{ alignItems: "center", marginRight: 16 }}
+            onPress={() => router.push(`/category/${item.id}`)}
           >
             <View
               style={{

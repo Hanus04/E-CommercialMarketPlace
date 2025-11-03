@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Slider from "@react-native-community/slider";
+import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { updateFilters, resetFilters } from "@/features/filter/filterSlice";
@@ -23,7 +23,7 @@ export default function FilterScreen() {
   const [maxPrice, setMaxPrice] = useState(filter.maxPrice);
   const [rating, setRating] = useState(filter.rating);
   const [shipping, setShipping] = useState(filter.shipping);
-
+  const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
   useEffect(() => {
     setMinPrice(filter.minPrice);
     setMaxPrice(filter.maxPrice);
@@ -97,22 +97,19 @@ export default function FilterScreen() {
           />
         </View>
 
-        <Slider
-          style={{ width: "100%", height: 40 }}
-          minimumValue={0}
-          maximumValue={20000000}
+        <MultiSlider
+          values={[minPrice, maxPrice]}
+          sliderLength={300}
+          min={0}
+          max={2000000}
           step={10000}
-          value={minPrice}
-          onValueChange={(v) => setMinPrice(Math.round(v))}
-        />
-
-        <Slider
-          style={{ width: "100%", height: 40, marginBottom: 10 }}
-          minimumValue={0}
-          maximumValue={20000000}
-          step={10000}
-          value={maxPrice}
-          onValueChange={(v) => setMaxPrice(Math.round(v))}
+          onValuesChange={(values) => {
+            setMinPrice(values[0]);
+            setMaxPrice(values[1]);
+            setPriceRange(values);
+          }}
+          selectedStyle={{ backgroundColor: "#007AFF" }}
+          markerStyle={{ backgroundColor: "#007AFF" }}
         />
 
         <Text style={styles.sectionTitle}>Average review</Text>

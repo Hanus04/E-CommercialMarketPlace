@@ -28,11 +28,7 @@ export interface Product {
   shipToStore: boolean;
 }
 
-export interface Cart {
-  cartId: number;
-  total: number;
-  customerId: number;
-}
+
 
 export interface Review {
   reviewId: number;
@@ -40,4 +36,14 @@ export interface Review {
   CustomercustomerId: number;
   ProductproductId: number;
   comment: string;
+}
+
+
+export interface CartItem{
+  cartItemId:number,
+  quantity:number,
+  subtotal:number,
+  OrderId:number,
+  productId:number,
+   CustomerId:number
 }

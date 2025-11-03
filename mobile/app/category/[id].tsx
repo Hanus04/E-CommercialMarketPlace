@@ -169,15 +169,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#eee",
-    padding: 10,
+    paddingHorizontal: 10,
     borderRadius: 10,
     alignItems: "center",
   },
   filterBtn: {
     marginLeft: 10,
     backgroundColor: "#eee",
-    padding: 10,
+    paddingHorizontal: 10,
     borderRadius: 10,
+    justifyContent: "center",
   },
   sectionHeader: {
     marginTop: 20,
