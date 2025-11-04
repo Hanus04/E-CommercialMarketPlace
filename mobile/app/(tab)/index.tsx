@@ -18,11 +18,16 @@ export default function HomeScreen() {
   const user = useSelector((state: RootState) => state.user.currentUser);
 
   const dispatch = useDispatch<AppDispatch>();
+  const [query, setQuery] = useState("");
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const { products, status, error } = useSelector(
     (state: RootState) => state.product
   );
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(query.toLowerCase())
+  );
+
   useEffect(() => {
     dispatch(productList());
   }, [dispatch]);
@@ -31,6 +36,7 @@ export default function HomeScreen() {
     // gọi API hoặc reload data ở đây
     setTimeout(() => setRefreshing(false), 1500);
   };
+
   if (user === undefined) return null;
   if (!user) {
     return <Redirect href="/(auth)/sign-in" />;
@@ -66,6 +72,48 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
       </View>
+      <View style={styles.searchBar}>
+        <Ionicons name="search" size={20} color="#777" />
+        <TextInput
+          value={query}
+          onChangeText={setQuery}
+          style={styles.input}
+          placeholder="Search for product"
+          placeholderTextColor="#aaa"
+        />
+        {query !== "" && (
+          <TouchableOpacity onPress={() => setQuery("")}>
+            <Ionicons name="close" size={20} color="#777" />
+          </TouchableOpacity>
+        )}
+      </View>
+      {query !== "" && (
+        <ScrollView style={{ marginHorizontal: 16, marginTop: 10 }}>
+          {filteredProducts.length > 0 ? (
+            filteredProducts.slice(0, 10).map((item) => (
+              <TouchableOpacity
+                key={item.productId}
+                style={styles.searchResult}
+                onPress={() => router.push(`/product/${item.productId}`)}
+              >
+                <Image
+                  source={{ uri: item.imageUrl }}
+                  style={styles.resultImage}
+                />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.resultText}>{item.name}</Text>
+                  <Text style={styles.resultPrice}>
+                    {item.price.toLocaleString("vi-VN")}₫
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={styles.emptyText}>Không tìm thấy sản phẩm</Text>
+          )}
+        </ScrollView>
+      )}
+
       {/* Categories */}
       <ScrollView
         horizontal
@@ -97,6 +145,7 @@ export default function HomeScreen() {
           <TouchableOpacity
             key={index}
             style={{ alignItems: "center", marginRight: 16 }}
+            onPress={() => router.push(`/category/${index + 1}`)}
           >
             <View
               style={{
@@ -196,14 +245,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: "bold" },
   avatar: { width: 36, height: 36, borderRadius: 18 },
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#f1f1f1",
-    borderRadius: 10,
-    margin: 16,
-    paddingHorizontal: 10,
-  },
   searchInput: { flex: 1, marginLeft: 8, height: 40 },
   categoryContainer: {
     flexDirection: "row",
@@ -274,5 +315,49 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 5,
   },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#eee",
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    marginHorizontal: 16,
+    marginTop: 14,
+    height: 45,
+  },
+  input: {
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 14,
+  },
+
   discountText: { color: "#fff", fontSize: 12, fontWeight: "bold" },
+  searchResult: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fafafa",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 8,
+  },
+  resultImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  resultText: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  resultPrice: {
+    color: "#0077cc",
+    fontWeight: "bold",
+    marginTop: 4,
+  },
+  emptyText: {
+    textAlign: "center",
+    marginTop: 10,
+    color: "#777",
+  },
 });

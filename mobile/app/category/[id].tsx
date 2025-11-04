@@ -20,6 +20,7 @@ export default function CategoryScreen() {
 
   const [query, setQuery] = useState("");
   const [activeTab, setActiveTab] = useState("best");
+  const [showAll, setShowAll] = useState(false);
 
   const categoryProducts = useMemo(() => {
     let list = products.filter(
@@ -36,6 +37,10 @@ export default function CategoryScreen() {
 
     return list;
   }, [products, id, query, activeTab]);
+
+  const displayProducts = showAll
+    ? categoryProducts
+    : categoryProducts.slice(0, 3);
 
   const tabs = [
     { key: "best", title: "Best Sales" },
@@ -82,24 +87,6 @@ export default function CategoryScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Category thumbnails */}
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Categories</Text>
-        <Text style={styles.link}>See all</Text>
-      </View>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: 10 }}
-      >
-        {categoryProducts.slice(0, 3).map((item: any) => (
-          <TouchableOpacity key={item.productId} style={styles.thumbCard}>
-            <Image source={{ uri: item.imageUrl }} style={styles.thumbImg} />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
       {/* Tabs */}
       <View style={styles.tabs}>
         {tabs.map((t) => (
@@ -115,36 +102,68 @@ export default function CategoryScreen() {
       </View>
 
       {/* Product List */}
-      {categoryProducts.length > 0 ? (
-        categoryProducts.map((item: any) => (
+      {displayProducts.length > 0 ? (
+        displayProducts.map((item: any) => (
           <TouchableOpacity
             key={item.productId}
             style={styles.productCard}
             onPress={() => router.push(`/product/${item.productId}`)}
           >
             <Image source={{ uri: item.imageUrl }} style={styles.img} />
+
             <View style={{ flex: 1 }}>
               <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.star}>⭐ {item.rating.toFixed(1)}</Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                {Array.from({ length: 5 }).map((_, i) => {
+                  const full = i + 1 <= Math.floor(item.rating);
+                  const half = !full && i < item.rating && item.rating < i + 1;
+
+                  return (
+                    <Ionicons
+                      key={i}
+                      name={
+                        full
+                          ? "star"
+                          : half
+                          ? "star-half-outline"
+                          : "star-outline"
+                      }
+                      size={16}
+                      color="#FFD700"
+                      style={{ marginRight: 2 }}
+                    />
+                  );
+                })}
+
+                <Text style={styles.starNumber}>{item.rating.toFixed(1)}</Text>
+              </View>
             </View>
+
             <Text style={styles.price}>
               {item.price.toLocaleString("vi-VN")}₫
             </Text>
-            <Ionicons
-              name="pricetag-outline"
-              size={20}
-              style={{ marginLeft: 10 }}
-            />
+
+            {/* icon them vo gio hang */}
+            <View style={styles.addIcon}>
+              <Ionicons name="add" size={18} color="#7B61FF" />
+            </View>
           </TouchableOpacity>
         ))
       ) : (
         <Text style={styles.empty}>Không có sản phẩm nào</Text>
       )}
 
-      {/* See All */}
-      <TouchableOpacity style={styles.seeAll}>
-        <Text style={{ color: "#666" }}>See all</Text>
-      </TouchableOpacity>
+      {/* See more */}
+      {categoryProducts.length > 3 && (
+        <TouchableOpacity
+          style={styles.seeAll}
+          onPress={() => setShowAll(!showAll)}
+        >
+          <Text style={{ color: "#666", fontWeight: "600" }}>
+            {showAll ? "Thu gọn" : "Xem tất cả"}
+          </Text>
+        </TouchableOpacity>
+      )}
 
       {/* Banner placeholder */}
       <Image
@@ -164,6 +183,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: { fontSize: 18, fontWeight: "bold" },
+
   searchRow: { flexDirection: "row", marginTop: 16 },
   searchBar: {
     flex: 1,
@@ -179,24 +199,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-  sectionHeader: {
-    marginTop: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  sectionTitle: { fontWeight: "600", fontSize: 15 },
-  link: { color: "#0095ff" },
-  thumbCard: {
-    width: 90,
-    height: 90,
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-  },
-  thumbImg: { width: 60, height: 60 },
+
   tabs: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -209,6 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#05BCD5",
     marginTop: 4,
   },
+
   productCard: {
     flexDirection: "row",
     backgroundColor: "#fafafa",
@@ -217,10 +221,28 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     alignItems: "center",
   },
+  starNumber: {
+    marginLeft: 4,
+    color: "#555",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+
   img: { width: 65, height: 65, borderRadius: 10, marginRight: 12 },
   name: { fontWeight: "600" },
   star: { marginTop: 2, color: "#f4c20d" },
   price: { fontWeight: "bold", color: "#2a7ae4" },
+  addIcon: {
+    marginLeft: 10,
+    width: 25,
+    height: 25,
+    borderWidth: 3,
+    borderRadius: 14,
+    borderColor: "#7B61FF",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   seeAll: {
     marginVertical: 16,
     backgroundColor: "#efefef",
@@ -228,6 +250,7 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: "center",
   },
+
   banner: {
     width: "100%",
     height: 130,

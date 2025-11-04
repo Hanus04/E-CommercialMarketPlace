@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,31 +7,38 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-} from "react-native"
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "@/store/store"
-import { signIn } from "@/features/user/userSlice"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { useRouter } from "expo-router"
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { signIn } from "@/features/user/userSlice";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
+import { fetchOrdersByCustomer } from "@/features/user/userSlice";
 
 export default function SignInScreen() {
-  const [userName, setUserName] = useState("")
-  const [password, setPassword] = useState("")
-  const dispatch = useDispatch<AppDispatch>()
-  const router = useRouter()
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const { status, error, currentUser } = useSelector(
     (state: RootState) => state.user
-  )
+  );
 
   const handleLogin = () => {
-    dispatch(signIn({ userName, password }))
-  }
+    dispatch(signIn({ userName, password }));
+  };
 
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     router.push("/")
+  //   }
+  // }, [currentUser])
   useEffect(() => {
     if (currentUser) {
-      router.push("/")
+      dispatch(fetchOrdersByCustomer(currentUser.customerId));
+      router.push("/");
     }
-  }, [currentUser])
+  }, [currentUser]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,10 +74,10 @@ export default function SignInScreen() {
         {error && <Text style={styles.error}>{error}</Text>}
       </View>
     </SafeAreaView>
-  )
+  );
 }
 
-const { height } = Dimensions.get("window")
+const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -116,4 +123,4 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
   },
-})
+});

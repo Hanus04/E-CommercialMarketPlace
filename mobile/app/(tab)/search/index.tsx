@@ -60,33 +60,35 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchBar}>
-        <Ionicons name="search" size={20} color="#777" />
-        <TextInput
-          value={query}
-          onChangeText={setQuery}
-          style={styles.input}
-          placeholder="Search for product"
-          placeholderTextColor="#aaa"
-        />
-        {query !== "" && (
-          <TouchableOpacity onPress={() => setQuery("")}>
-            <Ionicons name="close" size={20} color="#777" />
-          </TouchableOpacity>
-        )}
-      </View>
+      <View style={styles.searchRow}>
+        <View style={styles.searchBar}>
+          <Ionicons name="search" size={20} color="#777" />
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            style={styles.input}
+            placeholder="Search for product"
+            placeholderTextColor="#aaa"
+          />
+          {query !== "" && (
+            <TouchableOpacity onPress={() => setQuery("")}>
+              <Ionicons name="close" size={20} color="#777" />
+            </TouchableOpacity>
+          )}
+        </View>
 
-      <TouchableOpacity
-        style={styles.filterBtn}
-        onPress={() => router.push("/search/filter")}
-      >
-        <Ionicons name="filter-outline" size={20} color="#050505" />
-        {badgeCount > 0 && (
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{badgeCount}</Text>
-          </View>
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.filterBtn}
+          onPress={() => router.push("/search/filter")}
+        >
+          <Ionicons name="filter-outline" size={20} color="#050505" />
+          {badgeCount > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{badgeCount}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      </View>
 
       <ScrollView>
         {filtered.length > 0 ? (
@@ -121,22 +123,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: "#fff",
   },
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#eee",
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    height: 45,
-  },
+
   input: { flex: 1, marginLeft: 8, fontSize: 14 },
-  filterBtn: {
-    marginTop: 12,
-    alignSelf: "flex-end",
-    backgroundColor: "#f3f3f3",
-    borderRadius: 6,
-    padding: 6,
-  },
   badge: {
     position: "absolute",
     top: -5,
@@ -153,8 +141,35 @@ const styles = StyleSheet.create({
     backgroundColor: "#fafafa",
     borderRadius: 10,
     marginVertical: 8,
+    marginTop: 10,
     padding: 10,
   },
+  searchRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+  },
+
+  searchBar: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#eee",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    height: 45,
+  },
+
+  filterBtn: {
+    marginLeft: 10,
+    backgroundColor: "#eee",
+    borderRadius: 10,
+    width: 45,
+    height: 45,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   image: { width: 70, height: 70, borderRadius: 10, marginRight: 12 },
   title: { fontSize: 15, fontWeight: "600" },
   price: { marginTop: 4, color: "#0077cc", fontWeight: "bold" },

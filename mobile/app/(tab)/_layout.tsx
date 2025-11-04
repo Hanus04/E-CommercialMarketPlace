@@ -7,18 +7,16 @@ import { Text, View } from "react-native";
 
 const TabsLayout = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
-  // const isLoading = useSelector((state: RootState) => state.user.isLoading); 
+  // const isLoading = useSelector((state: RootState) => state.user.isLoading);
 
-  
-  if ( user === undefined) return null;
+  if (user === undefined) return null;
 
-  
   if (!user) {
     return <Redirect href="/(auth)/sign-in" />;
   }
 
   return (
-    <Tabs 
+    <Tabs
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: true,
@@ -72,7 +70,7 @@ const TabsLayout = () => {
         options={{
           title: "Inbox",
           tabBarIcon: ({ color, size }) => (
-             <View>
+            <View>
               <Ionicons name="chatbubble-outline" size={size} color={color} />
               <View
                 style={{
@@ -87,13 +85,13 @@ const TabsLayout = () => {
                 <Text style={{ color: "white", fontSize: 10 }}>1</Text>
               </View>
             </View>
-            
           ),
         }}
       />
       <Tabs.Screen
         name="account"
         options={{
+          href: "/account",
           title: "Account",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
