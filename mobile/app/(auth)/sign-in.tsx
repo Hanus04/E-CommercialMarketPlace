@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,84 +7,93 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-} from "react-native"
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "@/store/store"
-import { signIn } from "@/features/user/userSlice"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { useRouter } from "expo-router"
+  Platform,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { signIn } from "@/features/user/userSlice";
+import { useRouter } from "expo-router";
 
 export default function SignInScreen() {
-  const [userName, setUserName] = useState("")
-  const [password, setPassword] = useState("")
-  const dispatch = useDispatch<AppDispatch>()
-  const router = useRouter()
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const { status, error, currentUser } = useSelector(
     (state: RootState) => state.user
-  )
+  );
 
   const handleLogin = () => {
-    dispatch(signIn({ userName, password }))
-  }
+    dispatch(signIn({ userName, password }));
+  };
 
   useEffect(() => {
-    if (currentUser) {
-      router.push("/")
-    }
-  }, [currentUser])
+    if (currentUser) router.push("/");
+  }, [currentUser]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.inner}>
-        <Image
-          source={require("@/assets/images/logo.png")}
-          style={styles.img}
-          resizeMode="contain"
-        />
-        <Text style={styles.title}>Chào bạn đến với Mini Super</Text>
-
-        <View style={styles.formInput}>
-          <TextInput
-            placeholder="Tên đăng nhập"
-            value={userName}
-            onChangeText={setUserName}
-            style={styles.input}
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: "#fff" }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0} // 👈 chỉnh cao hơn để không bị che
+    >
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.inner}>
+          <Image
+            source={require("@/assets/images/logo.png")}
+            style={styles.img}
+            resizeMode="contain"
           />
-          <TextInput
-            placeholder="Mật khẩu"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-            style={styles.input}
-          />
+          <Text style={styles.title}>Chào bạn đến với Mini Super</Text>
 
-          <View style={styles.buttonContainer}>
-            <Button title="Đăng nhập" onPress={handleLogin} />
+          <View style={styles.formInput}>
+            <TextInput
+              placeholder="Tên đăng nhập"
+              value={userName}
+              onChangeText={setUserName}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Mật khẩu"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+              style={styles.input}
+            />
+
+            <View style={styles.buttonContainer}>
+              <Button title="Đăng nhập" onPress={handleLogin} />
+            </View>
           </View>
-        </View>
 
-        {status === "loading" && <Text>Đang đăng nhập...</Text>}
-        {error && <Text style={styles.error}>{error}</Text>}
-      </View>
-    </SafeAreaView>
-  )
+          {status === "loading" && <Text>Đang đăng nhập...</Text>}
+          {error && <Text style={styles.error}>{error}</Text>}
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
 }
 
-const { height } = Dimensions.get("window")
+const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
+  scroll: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingVertical: -50,
   },
   inner: {
-    flex: 1,
+    marginTop: -40,
     alignItems: "center",
     paddingHorizontal: 24,
   },
   img: {
     height: height * 0.3,
     width: "80%",
-    marginTop: 60,
     marginBottom: 20,
   },
   title: {
@@ -116,4 +125,4 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
   },
-})
+});

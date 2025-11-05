@@ -7,195 +7,221 @@ import {
   TextInput,
   StyleSheet,
   RefreshControl,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { Redirect, useNavigation, useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { productList } from "@/features/product/productSlice";
 import { useEffect, useState } from "react";
+
 export default function HomeScreen() {
   const user = useSelector((state: RootState) => state.user.currentUser);
-
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
-  const { products, status, error } = useSelector(
-    (state: RootState) => state.product
-  );
+  const { products, status } = useSelector((state: RootState) => state.product);
+  const [searchText, setSearchText] = useState("");
+
   useEffect(() => {
     dispatch(productList());
   }, [dispatch]);
+
   const onRefresh = () => {
     setRefreshing(true);
-    // gọi API hoặc reload data ở đây
     setTimeout(() => setRefreshing(false), 1500);
   };
-  if (user === undefined) return null;
-  if (!user) {
-    return <Redirect href="/(auth)/sign-in" />;
-  }
-  return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      <View style={styles.header}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <TouchableOpacity style={{ marginRight: 8 }}>
-            <Image
-              source={require("@/assets/images/logo.png")}
-              style={{ height: 50, width: 40 }}
-            />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>All Deals</Text>
-        </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <TouchableOpacity style={{ marginRight: 12 }}>
-            <Ionicons
-              name="cart-outline"
-              size={22}
-              color="#000"
-              onPress={() => router.push("/checkout/Checkout")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={{
-                uri: "https://randomuser.me/api/portraits/women/44.jpg",
-              }}
-              style={styles.avatar}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* Categories */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16 }}
-      >
-        {[
-          {
-            id: 1,
-            title: "Electronics",
-            icon: require("@/assets/images/phone.png"),
-            color: "#7B61FF",
-          },
-          {
-            id: 3,
-            title: "Fashion",
-            icon: require("@/assets/images/shoes.png"),
-            color: "#4069E5",
-          },
-          {
-            id: 2,
-            title: "Beauty",
-            icon: require("@/assets/images/lipstick.png"),
-            color: "#ED7C2C",
-          },
-          {
-            id: 4,
-            title: "Fresh",
-            icon: require("@/assets/images/avocado.png"),
-            color: "#E05957",
-          },
-        ].map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={{ alignItems: "center", marginRight: 16 }}
-            onPress={() => router.push(`/category/${item.id}`)}
-          >
-            <View
-              style={{
-                width: 70,
-                height: 70,
-                borderRadius: 35,
-                backgroundColor: item.color,
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: 20,
-              }}
-            >
-              <Image source={item.icon} style={{ width: 50, height: 50 }} />
-            </View>
-            <Text style={{ marginTop: 6, fontSize: 13 }}>{item.title}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
 
-      {/* Banner */}
-      <View style={styles.banner}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.bannerTitle}>Shoes</Text>
-          <Text style={styles.bannerSubtitle}>50% off</Text>
+  if (user === undefined) return null;
+  if (!user) return <Redirect href="/(auth)/sign-in" />;
+
+  return (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={20} // cao hơn bàn phím 20px
+    >
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TouchableOpacity style={{ marginRight: 8 }}>
+              <Image
+                source={require("@/assets/images/logo.png")}
+                style={{ height: 50, width: 40 }}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>All Deals</Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TouchableOpacity style={{ marginRight: 12 }}>
+              <Ionicons
+                name="cart-outline"
+                size={22}
+                color="#000"
+                onPress={() => router.push("/checkout/Checkout")}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image
+                source={{
+                  uri: "https://randomuser.me/api/portraits/women/44.jpg",
+                }}
+                style={styles.avatar}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Search bar */}
+        <View style={styles.searchBar}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search products..."
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+        </View>
+
+        {/* Categories */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 16 }}
+        >
+          {[
+            {
+              id: 1,
+              title: "Electronics",
+              icon: require("@/assets/images/phone.png"),
+              color: "#7B61FF",
+            },
+            {
+              id: 2,
+              title: "Beauty",
+              icon: require("@/assets/images/lipstick.png"),
+              color: "#ED7C2C",
+            },
+            {
+              id: 3,
+              title: "Fashion",
+              icon: require("@/assets/images/shoes.png"),
+              color: "#4069E5",
+            },
+            {
+              id: 4,
+              title: "Fresh",
+              icon: require("@/assets/images/avocado.png"),
+              color: "#E05957",
+            },
+          ].map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={{ alignItems: "center", marginRight: 16 }}
+              onPress={() => router.push(`/category/${item.id}`)}
+            >
+              <View
+                style={{
+                  width: 70,
+                  height: 70,
+                  borderRadius: 35,
+                  backgroundColor: item.color,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 20,
+                }}
+              >
+                <Image source={item.icon} style={{ width: 50, height: 50 }} />
+              </View>
+              <Text style={{ marginTop: 6, fontSize: 13 }}>{item.title}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+
+        {/* Banner */}
+        <View style={styles.banner}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.bannerTitle}>Shoes</Text>
+            <Text style={styles.bannerSubtitle}>50% off</Text>
+            <TouchableOpacity
+              style={styles.buyButton}
+              onPress={() =>
+                router.push(`/product/${products.at(22)?.productId}`)
+              }
+            >
+              <Text style={styles.buyText}>Buy now</Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
-            style={styles.buyButton}
             onPress={() =>
               router.push(`/product/${products.at(22)?.productId}`)
             }
           >
-            <Text style={styles.buyText}>Buy now</Text>
+            <Image
+              source={{ uri: products.at(22)?.imageUrl }}
+              style={styles.bannerImage}
+            />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => router.push(`/product/${products.at(22)?.productId}`)}
-        >
-          <Image
-            source={{ uri: products.at(22)?.imageUrl }}
-            style={styles.bannerImage}
-          />
-        </TouchableOpacity>
-      </View>
-      {/* Deals with 30% label */}
-      <View style={styles.dealContainer}>
-        {status === "succeeded" &&
-          products.slice(5, 7).map((item) => (
-            <View style={styles.dealItem} key={item.productId}>
+
+        {/* Products / Deals */}
+        <View style={styles.dealContainer}>
+          {status === "succeeded" &&
+            products.slice(5, 7).map((item) => (
+              <View style={styles.dealItem} key={item.productId}>
+                <TouchableOpacity
+                  onPress={() => router.push(`/product/${item.productId}`)}
+                >
+                  <Image
+                    source={{ uri: item.imageUrl }}
+                    style={styles.dealImage}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+                <View style={styles.discountLabel}>
+                  <Text style={styles.discountText}>30%</Text>
+                </View>
+              </View>
+            ))}
+        </View>
+
+        {/* Recommended */}
+        <View style={styles.recommendedHeader}>
+          <Text style={styles.recommendedTitle}>Recommended for you</Text>
+          <Text style={styles.viewAll}>View all</Text>
+        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {status === "succeeded" &&
+            products.slice(0, 5).map((item) => (
               <TouchableOpacity
+                key={item.productId}
+                style={styles.productCard}
                 onPress={() => router.push(`/product/${item.productId}`)}
               >
                 <Image
                   source={{ uri: item.imageUrl }}
-                  style={styles.dealImage}
+                  style={styles.productImage}
                   resizeMode="contain"
                 />
+                <Text style={styles.productTitle}>{item.name}</Text>
+                <Text style={styles.price}>${item.price}</Text>
               </TouchableOpacity>
-              <View style={styles.discountLabel}>
-                <Text style={styles.discountText}>30%</Text>
-              </View>
-            </View>
-          ))}
-      </View>
-      {/* Recommended */}
-      <View style={styles.recommendedHeader}>
-        <Text style={styles.recommendedTitle}>Recommended for you</Text>
-        <Text style={styles.viewAll}>View all</Text>
-      </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {status === "succeeded" &&
-          products.slice(0, 5).map((item) => (
-            <TouchableOpacity
-              key={item.productId}
-              style={styles.productCard}
-              onPress={() => router.push(`/product/${item.productId}`)}
-            >
-              <Image
-                source={{ uri: item.imageUrl }}
-                style={styles.productImage}
-                resizeMode="contain"
-              />
-              <Text style={styles.productTitle}>{item.name}</Text>
-              <Text style={styles.price}>${item.price}</Text>
-            </TouchableOpacity>
-          ))}
+            ))}
+        </ScrollView>
       </ScrollView>
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
   header: {
@@ -216,15 +242,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   searchInput: { flex: 1, marginLeft: 8, height: 40 },
-  categoryContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-  categoryItem: { alignItems: "center", marginHorizontal: 10 },
-  categoryIconBox: { backgroundColor: "#eee", borderRadius: 50, padding: 12 },
-  categoryIcon: { width: 40, height: 40 },
-  categoryText: { marginTop: 5, fontSize: 13 },
   banner: {
     backgroundColor: "#eef4ff",
     margin: 16,
@@ -244,30 +261,6 @@ const styles = StyleSheet.create({
   },
   buyText: { color: "#fff", fontSize: 13, fontWeight: "500" },
   bannerImage: { width: 150, height: 150 },
-  recommendedHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 16,
-    marginBottom: 8,
-  },
-  recommendedTitle: { fontSize: 16, fontWeight: "bold" },
-  viewAll: { color: "#0095ff" },
-  productCard: { width: 140, marginRight: 12, marginLeft: 16 },
-  productImage: { width: 140, height: 120, borderRadius: 10 },
-  productTitle: { fontWeight: "bold", marginTop: 6 },
-  ratingRow: { flexDirection: "row", alignItems: "center", marginTop: 4 },
-  ratingText: { marginLeft: 4 },
-  price: { color: "#0095ff", fontWeight: "bold" },
-  bottomNav: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderColor: "#eee",
-    marginTop: 20,
-  },
-  navItem: { alignItems: "center" },
-  navText: { fontSize: 12, color: "#666", marginTop: 2 },
   dealContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -286,4 +279,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   discountText: { color: "#fff", fontSize: 12, fontWeight: "bold" },
+  recommendedHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 16,
+    marginBottom: 8,
+  },
+  recommendedTitle: { fontSize: 16, fontWeight: "bold" },
+  viewAll: { color: "#0095ff" },
+  productCard: { width: 140, marginRight: 12, marginLeft: 16 },
+  productImage: { width: 140, height: 120, borderRadius: 10 },
+  productTitle: { fontWeight: "bold", marginTop: 6 },
+  price: { color: "#0095ff", fontWeight: "bold" },
 });
