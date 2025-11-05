@@ -29,6 +29,11 @@ export default function SignInScreen() {
     dispatch(signIn({ userName, password }));
   };
 
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     router.push("/")
+  //   }
+  // }, [currentUser])
   useEffect(() => {
     if (currentUser) router.push("/");
   }, [currentUser]);

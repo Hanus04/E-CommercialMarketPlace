@@ -271,11 +271,26 @@ export default function ProductDetail() {
             <Text style={{ fontSize: 16, color: "#666262ff" }}>
               Notify me of promotions
             </Text>
-            <Switch value={isEnabled} onValueChange={setIsEnabled} />
+            <Switch
+              value={isEnabled}
+              onValueChange={setIsEnabled}
+              style={{
+                justifyContent: "center",
+                marginTop: 20,
+                marginRight: 10,
+              }}
+            />
           </View>
           {/* footer */}
 
-          <View style={{ flexDirection: "row", width: "100%", gap: 20 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              gap: 20,
+              marginTop: 10,
+            }}
+          >
             <View
               style={{
                 width: "15%",

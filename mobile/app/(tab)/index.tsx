@@ -20,10 +20,16 @@ import { useEffect, useState } from "react";
 export default function HomeScreen() {
   const user = useSelector((state: RootState) => state.user.currentUser);
   const dispatch = useDispatch<AppDispatch>();
+  const [query, setQuery] = useState("");
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
+
   const { products, status } = useSelector((state: RootState) => state.product);
   const [searchText, setSearchText] = useState("");
+
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(query.toLowerCase())
+  );
 
   useEffect(() => {
     dispatch(productList());
@@ -33,6 +39,11 @@ export default function HomeScreen() {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 1500);
   };
+
+  if (user === undefined) return null;
+  if (!user) {
+    return <Redirect href="/(auth)/sign-in" />;
+  }
 
   if (user === undefined) return null;
   if (!user) return <Redirect href="/(auth)/sign-in" />;
@@ -233,14 +244,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: "bold" },
   avatar: { width: 36, height: 36, borderRadius: 18 },
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#f1f1f1",
-    borderRadius: 10,
-    margin: 16,
-    paddingHorizontal: 10,
-  },
   searchInput: { flex: 1, marginLeft: 8, height: 40 },
   banner: {
     backgroundColor: "#eef4ff",
@@ -278,7 +281,24 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 5,
   },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#eee",
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    marginHorizontal: 16,
+    marginTop: 14,
+    height: 45,
+  },
+  input: {
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 14,
+  },
+
   discountText: { color: "#fff", fontSize: 12, fontWeight: "bold" },
+
   recommendedHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -291,4 +311,33 @@ const styles = StyleSheet.create({
   productImage: { width: 140, height: 120, borderRadius: 10 },
   productTitle: { fontWeight: "bold", marginTop: 6 },
   price: { color: "#0095ff", fontWeight: "bold" },
+
+  searchResult: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fafafa",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 8,
+  },
+  resultImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  resultText: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  resultPrice: {
+    color: "#0077cc",
+    fontWeight: "bold",
+    marginTop: 4,
+  },
+  emptyText: {
+    textAlign: "center",
+    marginTop: 10,
+    color: "#777",
+  },
 });
