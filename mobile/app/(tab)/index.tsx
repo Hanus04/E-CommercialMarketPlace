@@ -79,7 +79,7 @@ export default function HomeScreen() {
                 name="cart-outline"
                 size={22}
                 color="#000"
-                onPress={() => router.push("/checkout/Checkout")}
+                onPress={() => router.push("/favorites")}
               />
             </TouchableOpacity>
             <TouchableOpacity>
@@ -95,13 +95,46 @@ export default function HomeScreen() {
 
         {/* Search bar */}
         <View style={styles.searchBar}>
+          <Ionicons name="search" size={20} color="#777" />
           <TextInput
-            style={styles.searchInput}
-            placeholder="Search products..."
-            value={searchText}
-            onChangeText={setSearchText}
+            value={query}
+            onChangeText={setQuery}
+            style={styles.input}
+            placeholder="Search for product"
+            placeholderTextColor="#aaa"
           />
+          {query !== "" && (
+            <TouchableOpacity onPress={() => setQuery("")}>
+              <Ionicons name="close" size={20} color="#777" />
+            </TouchableOpacity>
+          )}
         </View>
+        {query !== "" && (
+          <ScrollView style={{ marginHorizontal: 16, marginTop: 10 }}>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.slice(0, 10).map((item) => (
+                <TouchableOpacity
+                  key={item.productId}
+                  style={styles.searchResult}
+                  onPress={() => router.push(`/product/${item.productId}`)}
+                >
+                  <Image
+                    source={{ uri: item.imageUrl }}
+                    style={styles.resultImage}
+                  />
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.resultText}>{item.name}</Text>
+                    <Text style={styles.resultPrice}>
+                      {item.price.toLocaleString("vi-VN")}₫
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text style={styles.emptyText}>Không tìm thấy sản phẩm</Text>
+            )}
+          </ScrollView>
+        )}
 
         {/* Categories */}
         <ScrollView
