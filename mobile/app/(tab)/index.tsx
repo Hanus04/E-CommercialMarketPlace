@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  Image,
   ScrollView,
   TouchableOpacity,
   TextInput,
@@ -10,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { Image } from "expo-image";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
@@ -25,7 +25,6 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   const { products, status } = useSelector((state: RootState) => state.product);
-  const [searchText, setSearchText] = useState("");
 
   const filteredProducts = products.filter((p) =>
     p.name.toLowerCase().includes(query.toLowerCase())
@@ -41,18 +40,13 @@ export default function HomeScreen() {
   };
 
   if (user === undefined) return null;
-  if (!user) {
-    return <Redirect href="/(auth)/sign-in" />;
-  }
-
-  if (user === undefined) return null;
   if (!user) return <Redirect href="/(auth)/sign-in" />;
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={20} // cao hơn bàn phím 20px
+      keyboardVerticalOffset={20}
     >
       <ScrollView
         style={styles.container}
@@ -69,6 +63,7 @@ export default function HomeScreen() {
               <Image
                 source={require("@/assets/images/logo.png")}
                 style={{ height: 50, width: 40 }}
+                cachePolicy="memory-disk"
               />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>All Deals</Text>
@@ -88,6 +83,7 @@ export default function HomeScreen() {
                   uri: "https://randomuser.me/api/portraits/women/44.jpg",
                 }}
                 style={styles.avatar}
+                cachePolicy="memory-disk" // ✅ cache avatar
               />
             </TouchableOpacity>
           </View>
@@ -109,6 +105,7 @@ export default function HomeScreen() {
             </TouchableOpacity>
           )}
         </View>
+
         {query !== "" && (
           <ScrollView style={{ marginHorizontal: 16, marginTop: 10 }}>
             {filteredProducts.length > 0 ? (
@@ -121,6 +118,7 @@ export default function HomeScreen() {
                   <Image
                     source={{ uri: item.imageUrl }}
                     style={styles.resultImage}
+                    cachePolicy="memory-disk"
                   />
                   <View style={{ flex: 1 }}>
                     <Text style={styles.resultText}>{item.name}</Text>
@@ -184,7 +182,11 @@ export default function HomeScreen() {
                   marginTop: 20,
                 }}
               >
-                <Image source={item.icon} style={{ width: 50, height: 50 }} />
+                <Image
+                  source={item.icon}
+                  style={{ width: 50, height: 50 }}
+                  cachePolicy="memory-disk" // ✅ cache icon category
+                />
               </View>
               <Text style={{ marginTop: 6, fontSize: 13 }}>{item.title}</Text>
             </TouchableOpacity>
@@ -213,11 +215,12 @@ export default function HomeScreen() {
             <Image
               source={{ uri: products.at(22)?.imageUrl }}
               style={styles.bannerImage}
+              cachePolicy="memory-disk"
             />
           </TouchableOpacity>
         </View>
 
-        {/* Products / Deals */}
+        {/* Deals */}
         <View style={styles.dealContainer}>
           {status === "succeeded" &&
             products.slice(5, 7).map((item) => (
@@ -229,6 +232,7 @@ export default function HomeScreen() {
                     source={{ uri: item.imageUrl }}
                     style={styles.dealImage}
                     resizeMode="contain"
+                    cachePolicy="memory-disk"
                   />
                 </TouchableOpacity>
                 <View style={styles.discountLabel}>
@@ -255,6 +259,7 @@ export default function HomeScreen() {
                   source={{ uri: item.imageUrl }}
                   style={styles.productImage}
                   resizeMode="contain"
+                  cachePolicy="memory-disk"
                 />
                 <Text style={styles.productTitle}>{item.name}</Text>
                 <Text style={styles.price}>${item.price}</Text>
@@ -277,7 +282,17 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: "bold" },
   avatar: { width: 36, height: 36, borderRadius: 18 },
-  searchInput: { flex: 1, marginLeft: 8, height: 40 },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#eee",
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    marginHorizontal: 16,
+    marginTop: 14,
+    height: 45,
+  },
+  input: { flex: 1, marginLeft: 10, fontSize: 14 },
   banner: {
     backgroundColor: "#eef4ff",
     margin: 16,
@@ -314,24 +329,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 5,
   },
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#eee",
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    marginHorizontal: 16,
-    marginTop: 14,
-    height: 45,
-  },
-  input: {
-    flex: 1,
-    marginLeft: 10,
-    fontSize: 14,
-  },
-
   discountText: { color: "#fff", fontSize: 12, fontWeight: "bold" },
-
   recommendedHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -344,7 +342,6 @@ const styles = StyleSheet.create({
   productImage: { width: 140, height: 120, borderRadius: 10 },
   productTitle: { fontWeight: "bold", marginTop: 6 },
   price: { color: "#0095ff", fontWeight: "bold" },
-
   searchResult: {
     flexDirection: "row",
     alignItems: "center",
@@ -359,18 +356,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 10,
   },
-  resultText: {
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  resultPrice: {
-    color: "#0077cc",
-    fontWeight: "bold",
-    marginTop: 4,
-  },
-  emptyText: {
-    textAlign: "center",
-    marginTop: 10,
-    color: "#777",
-  },
+  resultText: { fontSize: 14, fontWeight: "600" },
+  resultPrice: { color: "#0077cc", fontWeight: "bold", marginTop: 4 },
+  emptyText: { textAlign: "center", marginTop: 10, color: "#777" },
 });
