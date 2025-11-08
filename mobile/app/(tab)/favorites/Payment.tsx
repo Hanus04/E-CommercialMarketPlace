@@ -45,7 +45,7 @@ export default function PaymentScreen() {
 
   const handlePayNow = () => {
     router.push({
-      pathname: "/checkout/order-success",
+      pathname: "/(tab)/favorites/order-success",
       params: {
         subtotal: "2800",
         tax: "280",

@@ -187,7 +187,7 @@ export default function CheckoutScreen() {
         style={styles.nextButton}
         onPress={() =>
           router.push({
-            pathname: "/checkout/Payment",
+            pathname: "/(tab)/favorites/Payment",
             params: { total: total.toString() },
           })
         }
@@ -261,7 +261,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   applyText: {
-    color: "#ccc",
     fontWeight: "600",
 
     fontSize: 15,

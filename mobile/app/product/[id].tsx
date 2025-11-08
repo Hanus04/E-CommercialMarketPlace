@@ -49,7 +49,7 @@ export default function ProductDetail() {
       addToCart({
         productId: product.productId,
         quantity: 1,
-        customerId: user.customerId, // lấy từ user
+        customerId: user.customerId ?? 0,
       })
     );
   };
@@ -76,7 +76,7 @@ export default function ProductDetail() {
               name="cart-outline"
               size={22}
               color="#000"
-              onPress={() => router.push("/checkout/Checkout")}
+              onPress={() => router.push("/(tab)/favorites")}
             />
             <Image
               source={{
@@ -276,7 +276,7 @@ export default function ProductDetail() {
               onValueChange={setIsEnabled}
               style={{
                 justifyContent: "center",
-                marginTop: 20,
+
                 marginRight: 10,
               }}
             />
@@ -309,7 +309,12 @@ export default function ProductDetail() {
                 onPress={() => handleAddToCart(product)}
               />
             </View>
-            <TouchableOpacity style={styles.buyBtn}>
+            <TouchableOpacity
+              style={styles.buyBtn}
+              onPress={() => (
+                handleAddToCart(product), router.push("/(tab)/favorites")
+              )}
+            >
               <Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
                 Buy Now
               </Text>

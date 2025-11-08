@@ -262,7 +262,18 @@ export default function HomeScreen() {
                   cachePolicy="memory-disk"
                 />
                 <Text style={styles.productTitle}>{item.name}</Text>
-                <Text style={styles.price}>${item.price}</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text>
+                    <Ionicons name="star" color={"yellow"} />
+                    {"  "} 4.5
+                  </Text>
+                  <Text style={styles.price}>${item.price}</Text>
+                </View>
               </TouchableOpacity>
             ))}
         </ScrollView>
@@ -341,7 +352,7 @@ const styles = StyleSheet.create({
   productCard: { width: 140, marginRight: 12, marginLeft: 16 },
   productImage: { width: 140, height: 120, borderRadius: 10 },
   productTitle: { fontWeight: "bold", marginTop: 6 },
-  price: { color: "#0095ff", fontWeight: "bold" },
+  price: { color: "#0095ff", fontWeight: "bold", marginRight: 30 },
   searchResult: {
     flexDirection: "row",
     alignItems: "center",

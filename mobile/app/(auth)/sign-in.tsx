@@ -10,6 +10,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
@@ -72,7 +73,28 @@ export default function SignInScreen() {
             />
 
             <View style={styles.buttonContainer}>
-              <Button title="Đăng nhập" onPress={handleLogin} />
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#FF6633",
+                  height: 40,
+                  borderRadius: 8,
+                  width: "80%",
+
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={handleLogin}
+              >
+                <Text
+                  style={{
+                    color: "#f9f9f9ff",
+                    fontSize: 18,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Đăng nhập
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -124,6 +146,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
     marginTop: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   error: {
     color: "red",
