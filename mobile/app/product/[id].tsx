@@ -1,7 +1,8 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
+import { addToCart } from "@/features/cart/cartSlice";
 import {
   View,
   Text,
@@ -14,18 +15,23 @@ import {
   RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AppDispatch } from "@/store/store";
+
 import {
   Ionicons,
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { useReducer, useState } from "react";
+import { Product } from "@/types/types";
 
 export default function ProductDetail() {
+  const dispatch = useDispatch<AppDispatch>();
   const { id } = useLocalSearchParams<{ id: string }>();
   const product = useSelector((state: RootState) =>
     state.product.products.find((p) => p.productId === Number(id))
   );
+
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
@@ -34,10 +40,24 @@ export default function ProductDetail() {
   };
   const router = useRouter();
   const [isEnabled, setIsEnabled] = useState(false);
+  const user = useSelector((state: RootState) => state.user.currentUser);
+
+  if (!user) return; // tránh trường hợp user chưa đăng nhập
+
+  const handleAddToCart = (product: Product) => {
+    dispatch(
+      addToCart({
+        productId: product.productId,
+        quantity: 1,
+        customerId: user.customerId ?? 0,
+      })
+    );
+  };
+
   if (!product) return <Text>Không tìm thấy sản phẩm</Text>;
   const images = [product.imageUrl, product.imageUrl, product.imageUrl];
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -52,7 +72,12 @@ export default function ProductDetail() {
           </TouchableOpacity>
 
           <View style={styles.headerRight}>
-            <Ionicons name="cart-outline" size={22} color="#000" />
+            <Ionicons
+              name="cart-outline"
+              size={22}
+              color="#000"
+              onPress={() => router.push("/(tab)/favorites")}
+            />
             <Image
               source={{
                 uri: "https://randomuser.me/api/portraits/women/44.jpg",
@@ -125,8 +150,9 @@ export default function ProductDetail() {
             </Text>
           </View>
 
-          <View
+          <TouchableOpacity
             style={{ flexDirection: "row", justifyContent: "space-between" }}
+            onPress={() => router.push("/review/review")}
           >
             <Text style={styles.sectionTitle}>Reviews</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -138,7 +164,7 @@ export default function ProductDetail() {
                 style={{ marginTop: 10 }}
               />
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.reviewBox}>
             <View style={{ alignItems: "center" }}>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>4.5/5</Text>
@@ -246,11 +272,26 @@ export default function ProductDetail() {
             <Text style={{ fontSize: 16, color: "#666262ff" }}>
               Notify me of promotions
             </Text>
-            <Switch value={isEnabled} onValueChange={setIsEnabled} />
+            <Switch
+              value={isEnabled}
+              onValueChange={setIsEnabled}
+              style={{
+                justifyContent: "center",
+
+                marginRight: 10,
+              }}
+            />
           </View>
           {/* footer */}
 
-          <View style={{ flexDirection: "row", width: "100%", gap: 20 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              gap: 20,
+              marginTop: 10,
+            }}
+          >
             <View
               style={{
                 width: "15%",
@@ -266,9 +307,15 @@ export default function ProductDetail() {
                 size={30}
                 color={"#05BCD5"}
                 style={{ alignItems: "center" }}
+                onPress={() => handleAddToCart(product)}
               />
             </View>
-            <TouchableOpacity style={styles.buyBtn}>
+            <TouchableOpacity
+              style={styles.buyBtn}
+              onPress={() => (
+                handleAddToCart(product), router.push("/(tab)/favorites")
+              )}
+            >
               <Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
                 Buy Now
               </Text>
@@ -276,7 +323,7 @@ export default function ProductDetail() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 const { width, height } = Dimensions.get("window");

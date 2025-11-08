@@ -1,5 +1,6 @@
 export interface Customer {
-  customerId: number;
+  id?: string;
+  customerId?: number;
   userName: string;
   password: string;
   email: string;
@@ -28,16 +29,22 @@ export interface Product {
   shipToStore: boolean;
 }
 
-export interface Cart {
-  cartId: number;
-  total: number;
-  customerId: number;
-}
+
 
 export interface Review {
-  reviewId: number;
+  id: number;
   rating: number;
-  CustomercustomerId: number;
-  ProductproductId: number;
+  customerId: number;
+  productId: number;
   comment: string;
 }
+
+export interface CartItem{
+  cartItemId:number,
+  quantity:number,
+  subtotal:number,
+  OrderId:number,
+  productId:number,
+   CustomerId:number
+}
+
