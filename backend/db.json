@@ -788,6 +788,12 @@
       "totalPrice": 230000,
       "CustomercustomerId": 1,
       "id": "ae5c"
+    },
+    {
+      "cartId": 2,
+      "totalPrice": 700000,
+      "CustomercustomerId": 2,
+      "id": "b001"
     }
   ],
   "cartItems": [
@@ -806,6 +812,14 @@
       "CartcartId": 1,
       "ProductproductId": 2,
       "id": "c354"
+    },
+    {
+      "cartItemId": 3,
+      "quantity": 2,
+      "subtotal": 700000,
+      "CartcartId": 2,
+      "ProductproductId": 11,
+      "id": "c356"
     }
   ],
   "vouchers": [
@@ -826,6 +840,22 @@
       "CustomercustomerId": 1,
       "VouchervoucherId": 1,
       "id": "348d"
+    },
+    {
+      "id": "b7dc",
+      "orderId": 2,
+      "orderDate": "2025-11-08",
+      "status": "Đã thanh toán",
+      "totalAmount": 3310000,
+      "CustomercustomerId": 2
+    },
+    {
+      "id": "95a2",
+      "orderId": 3,
+      "orderDate": "2025-11-08",
+      "status": "Đã thanh toán",
+      "totalAmount": 250000,
+      "CustomercustomerId": 2
     }
   ],
   "orderItems": [
@@ -846,6 +876,33 @@
       "OrderorderId": 1,
       "ProductproductId": 2,
       "id": "efca"
+    },
+    {
+      "id": "7333",
+      "orderItemId": 3,
+      "quantity": 7,
+      "price": 250000,
+      "subtotal": 1750000,
+      "OrderorderId": 2,
+      "ProductproductId": 6
+    },
+    {
+      "id": "f2c1",
+      "orderItemId": 4,
+      "quantity": 2,
+      "price": 780000,
+      "subtotal": 1560000,
+      "OrderorderId": 2,
+      "ProductproductId": 22
+    },
+    {
+      "id": "89e1",
+      "orderItemId": 5,
+      "quantity": 1,
+      "price": 250000,
+      "subtotal": 250000,
+      "OrderorderId": 3,
+      "ProductproductId": 6
     }
   ],
   "payments": [
@@ -857,6 +914,24 @@
       "paymentDate": "2025-10-25",
       "OrderorderId": 1,
       "id": "93cc"
+    },
+    {
+      "id": "e398",
+      "paymentId": 2,
+      "method": "visa",
+      "amount": 3310000,
+      "status": "Hoàn tất",
+      "paymentDate": "2025-11-08",
+      "OrderorderId": 2
+    },
+    {
+      "id": "df37",
+      "paymentId": 3,
+      "method": "visa",
+      "amount": 250000,
+      "status": "Hoàn tất",
+      "paymentDate": "2025-11-08",
+      "OrderorderId": 3
     }
   ],
   "reviews": [
@@ -894,6 +969,15 @@
       "img": "blob:http://localhost:8082/f9a3b109-0ec0-4df9-8e71-d4524fd689c3",
       "ProductproductId2": 1,
       "CustomercustomerId2": 1
+    },
+    {
+      "id": "1da4",
+      "rating": 5,
+      "comment": "Bsjsjjsjskak",
+      "tags": [],
+      "img": null,
+      "ProductproductId2": 6,
+      "CustomercustomerId2": 2
     }
   ],
   "messages": [
