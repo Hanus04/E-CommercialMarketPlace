@@ -150,8 +150,9 @@ export default function ProductDetail() {
             </Text>
           </View>
 
-          <View
+          <TouchableOpacity
             style={{ flexDirection: "row", justifyContent: "space-between" }}
+            onPress={() => router.push("/review/review")}
           >
             <Text style={styles.sectionTitle}>Reviews</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -163,7 +164,7 @@ export default function ProductDetail() {
                 style={{ marginTop: 10 }}
               />
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.reviewBox}>
             <View style={{ alignItems: "center" }}>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>4.5/5</Text>

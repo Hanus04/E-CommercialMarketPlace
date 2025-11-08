@@ -32,13 +32,12 @@ export interface Product {
 
 
 export interface Review {
-  reviewId: number;
+  id: number;
   rating: number;
-  CustomercustomerId: number;
-  ProductproductId: number;
+  customerId: number;
+  productId: number;
   comment: string;
 }
-
 
 export interface CartItem{
   cartItemId:number,
@@ -48,3 +47,4 @@ export interface CartItem{
   productId:number,
    CustomerId:number
 }
+

@@ -128,7 +128,7 @@ export default function CheckoutScreen() {
           </View>
         ))}
 
-        {/* Voucher */}
+      
         {/* Voucher */}
         <View style={styles.voucherBox}>
           <Text style={styles.voucherLabel}>Voucher</Text>
@@ -158,7 +158,7 @@ export default function CheckoutScreen() {
               ]}
               onPress={() => {
                 if (voucherCode.trim() !== "") {
-                  // xử lý apply mã
+                  
                   alert(`Áp dụng voucher: ${voucherCode}`);
                 }
               }}
@@ -231,13 +231,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 15,
+    marginLeft: 5,
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 6,
     width: 60,
-
+    marginLeft: 5,
     textAlign: "center",
 
     marginRight: 2,
@@ -247,6 +248,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 6,
     marginRight: 5,
+    marginLeft: 5,
   },
   smallText: { color: "#fff", fontWeight: "600", fontSize: 13 },
 
