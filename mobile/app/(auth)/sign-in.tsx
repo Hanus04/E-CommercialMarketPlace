@@ -15,7 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { signIn } from "@/features/user/userSlice";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 
 export default function SignInScreen() {
   const [userName, setUserName] = useState("");
@@ -96,6 +96,23 @@ export default function SignInScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
+
+            <View style={styles.linkContainer}>
+              <Text style={styles.linkText}>Chưa có tài khoản? </Text>
+              <Link href="/sign-up" asChild>
+                <TouchableOpacity>
+                  <Text style={styles.link}>Đăng ký</Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+
+            <View style={[styles.linkContainer, { marginTop: 10 }]}>
+              <Link href="/forgot-password" asChild>
+                <TouchableOpacity>
+                  <Text style={styles.link}>Quên mật khẩu?</Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
           </View>
 
           {status === "loading" && <Text>Đang đăng nhập...</Text>}
@@ -148,6 +165,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
+  },
+  linkContainer: {
+    flexDirection: "row",
+    marginTop: 20,
+    alignItems: "center",
+  },
+  linkText: {
+    fontSize: 16,
+    color: "#666",
+  },
+  link: {
+    fontSize: 16,
+    color: "#FF6633",
+    fontWeight: "600",
   },
   error: {
     color: "red",

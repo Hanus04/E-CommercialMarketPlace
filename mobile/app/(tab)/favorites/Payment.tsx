@@ -14,6 +14,7 @@ import { clearCart } from "@/features/cart/cartSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { BASE_URL } from "@/config";
+import { formatVND } from "@/utils/format";
 
 // import BASE_URL from config if needed; currently using API_BASE inside this component
 
@@ -194,7 +195,7 @@ export default function PaymentScreen() {
         {/* TOTAL */}
         <View style={styles.totalBox}>
           <Text style={styles.totalLabel}>TOTAL</Text>
-          <Text style={styles.totalValue}>${total ?? "0"}</Text>
+          <Text style={styles.totalValue}>{formatVND(total)}</Text>
         </View>
 
         {/* Payment Methods */}

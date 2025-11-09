@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
+import { formatVND } from "@/utils/format";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { updateQuantity, removeFromCart } from "@/features/cart/cartSlice";
@@ -108,7 +109,7 @@ export default function CheckoutScreen() {
                   </TouchableOpacity>
                 </View>
               ) : (
-                <Text style={styles.price}>${item.subtotal}</Text>
+                <Text style={styles.price}>{formatVND(item.subtotal)}</Text>
               )}
             </View>
 
@@ -128,7 +129,6 @@ export default function CheckoutScreen() {
           </View>
         ))}
 
-      
         {/* Voucher */}
         <View style={styles.voucherBox}>
           <Text style={styles.voucherLabel}>Voucher</Text>
@@ -158,7 +158,6 @@ export default function CheckoutScreen() {
               ]}
               onPress={() => {
                 if (voucherCode.trim() !== "") {
-                  
                   alert(`Áp dụng voucher: ${voucherCode}`);
                 }
               }}
@@ -178,7 +177,7 @@ export default function CheckoutScreen() {
         {/* Total */}
         <View style={styles.totalBox}>
           <Text style={styles.totalLabel}>TOTAL</Text>
-          <Text style={styles.totalValue}>${total}</Text>
+          <Text style={styles.totalValue}>{formatVND(total)}</Text>
         </View>
       </ScrollView>
 

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { formatVND } from "@/utils/format";
 
 export default function OrderSuccessScreen() {
   const router = useRouter();
@@ -36,9 +37,9 @@ export default function OrderSuccessScreen() {
 
       {/* Order summary box */}
       <View style={styles.summaryBox}>
-        <Row label="Subtotal" value={`$${subtotal ?? "0"}`} />
-        <Row label="Tax (10%)" value={`$${tax ?? "0"}`} />
-        <Row label="Fees" value="$0" />
+        <Row label="Subtotal" value={formatVND(subtotal)} />
+        <Row label="Tax (10%)" value={formatVND(tax)} />
+        <Row label="Fees" value={formatVND(0)} />
         <Row
           label="Card"
           valueComponent={
@@ -60,7 +61,7 @@ export default function OrderSuccessScreen() {
               <View style={styles.successBadge}>
                 <Text style={styles.successText}>Success</Text>
               </View>
-              <Text style={styles.totalValue}>${total ?? "0"}</Text>
+              <Text style={styles.totalValue}>{formatVND(total)}</Text>
             </View>
           }
         />

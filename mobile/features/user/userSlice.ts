@@ -49,6 +49,43 @@ export const signIn = createAsyncThunk<
   return data[0];
 });
 
+export const signUp = createAsyncThunk<
+  Customer,
+  { userName: string; password: string },
+  { rejectValue: string }
+>("user/signUp", async ({ userName, password }, { rejectWithValue }) => {
+  // Check if username already exists
+  const checkUser = await fetch(`${USERS_URL}?userName=${userName}`);
+  const existingUsers = await checkUser.json();
+  if (existingUsers.length > 0) {
+    return rejectWithValue("Tên đăng nhập đã tồn tại");
+  }
+
+  // Create new user
+  const res = await fetch(USERS_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userName,
+      password,
+      fullName: "",
+      email: "",
+      phone: "",
+      address: "",
+      avatar: "",
+    }),
+  });
+
+  if (!res.ok) {
+    return rejectWithValue("Đăng ký thất bại");
+  }
+
+  const newUser = await res.json();
+  return newUser;
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -70,6 +107,18 @@ const userSlice = createSlice({
       .addCase(signIn.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload ?? "Đăng nhập thất bại";
+      })
+      .addCase(signUp.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(signUp.fulfilled, (state, action: PayloadAction<Customer>) => {
+        state.status = "succeeded";
+        state.currentUser = action.payload;
+        state.error = null;
+      })
+      .addCase(signUp.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload ?? "Đăng ký thất bại";
       })
       .addCase(updateUserAsync.fulfilled, (state, action) => {
         state.currentUser = { ...state.currentUser, ...action.payload };

@@ -11,8 +11,10 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import CartIcon from "@/components/CartIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
+import { formatVND } from "@/utils/format";
 import { Redirect, useRouter } from "expo-router";
 import { productList } from "@/features/product/productSlice";
 import { useEffect, useState } from "react";
@@ -69,21 +71,14 @@ export default function HomeScreen() {
             <Text style={styles.headerTitle}>All Deals</Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <TouchableOpacity style={{ marginRight: 12 }}>
-              <Ionicons
-                name="cart-outline"
-                size={22}
-                color="#000"
-                onPress={() => router.push("/favorites")}
-              />
-            </TouchableOpacity>
+            <CartIcon />
             <TouchableOpacity>
               <Image
                 source={{
                   uri: "https://randomuser.me/api/portraits/women/44.jpg",
                 }}
                 style={styles.avatar}
-                cachePolicy="memory-disk" // ✅ cache avatar
+                cachePolicy="memory-disk"
               />
             </TouchableOpacity>
           </View>
@@ -123,7 +118,7 @@ export default function HomeScreen() {
                   <View style={{ flex: 1 }}>
                     <Text style={styles.resultText}>{item.name}</Text>
                     <Text style={styles.resultPrice}>
-                      {item.price.toLocaleString("vi-VN")}₫
+                      {formatVND(item.price)}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -272,7 +267,7 @@ export default function HomeScreen() {
                     <Ionicons name="star" color={"yellow"} />
                     {"  "} 4.5
                   </Text>
-                  <Text style={styles.price}>${item.price}</Text>
+                  <Text style={styles.price}>{formatVND(item.price)}</Text>
                 </View>
               </TouchableOpacity>
             ))}

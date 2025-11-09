@@ -17,11 +17,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppDispatch } from "@/store/store";
 
+import { formatVND } from "@/utils/format";
 import {
   Ionicons,
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import CartIcon from "@/components/CartIcon";
 import { useReducer, useState } from "react";
 import { Product } from "@/types/types";
 
@@ -72,12 +74,7 @@ export default function ProductDetail() {
           </TouchableOpacity>
 
           <View style={styles.headerRight}>
-            <Ionicons
-              name="cart-outline"
-              size={22}
-              color="#000"
-              onPress={() => router.push("/(tab)/favorites")}
-            />
+            <CartIcon />
             <Image
               source={{
                 uri: "https://randomuser.me/api/portraits/women/44.jpg",
@@ -110,7 +107,7 @@ export default function ProductDetail() {
         <View style={styles.infoSection}>
           <Text style={styles.name}>{product.name}</Text>
           <View style={styles.row}>
-            <Text style={styles.price}>${product.price}</Text>
+            <Text style={styles.price}>{formatVND(product.price)}</Text>
             <View style={styles.ratingRow}>
               <Ionicons name="star" color="#FFD700" size={16} />
               <Text style={{ fontWeight: "500" }}>4.5</Text>
@@ -246,7 +243,9 @@ export default function ProductDetail() {
                   style={styles.relatedImg}
                 />
                 <Text style={styles.relatedName}>{product.name}</Text>
-                <Text style={{ color: "#888" }}>${product.price}</Text>
+                <Text style={{ color: "#888" }}>
+                  {formatVND(product.price)}
+                </Text>
               </View>
             ))}
           </ScrollView>

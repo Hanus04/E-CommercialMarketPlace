@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import CartIcon from "@/components/CartIcon";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
@@ -65,9 +66,7 @@ export default function CategoryScreen() {
 
         <Text style={styles.title}>{categoryNames[Number(id)]}</Text>
 
-        <TouchableOpacity>
-          <Ionicons name="cart-outline" size={24} />
-        </TouchableOpacity>
+        <CartIcon />
       </View>
 
       {/* Search */}

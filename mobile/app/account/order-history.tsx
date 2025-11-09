@@ -12,6 +12,7 @@ import { useRouter } from "expo-router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { BASE_URL } from "@/config";
+import { formatVND } from "@/utils/format";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function OrderHistory() {
@@ -113,7 +114,7 @@ export default function OrderHistory() {
                           {product.name}
                         </Text>
                         <Text style={styles.productPrice}>
-                          {product.price.toLocaleString()} đ
+                          {formatVND(product.price)}
                         </Text>
                       </View>
                       <Text style={styles.productQty}>x{oi.quantity}</Text>
@@ -125,7 +126,7 @@ export default function OrderHistory() {
                   <Text style={styles.totalText}>
                     Tổng tiền ({items.length} sản phẩm):{" "}
                     <Text style={styles.totalPrice}>
-                      {item.totalAmount.toLocaleString()} đ
+                      {formatVND(item.totalAmount)}
                     </Text>
                   </Text>
                 </View>

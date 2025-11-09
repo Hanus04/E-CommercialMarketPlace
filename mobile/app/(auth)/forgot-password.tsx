@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,36 +11,17 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
-import { signUp } from "@/features/user/userSlice";
 import { useRouter, Link } from "expo-router";
 
-export default function SignUpScreen() {
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const dispatch = useDispatch<AppDispatch>();
+export default function ForgotPasswordScreen() {
+  const [email, setEmail] = useState("");
   const router = useRouter();
-  const { status, error, currentUser } = useSelector(
-    (state: RootState) => state.user
-  );
 
-  const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      setPasswordError("Mật khẩu không khớp");
-      return;
-    }
-    setPasswordError("");
-    dispatch(signUp({ userName, password }));
+  const handleResetPassword = () => {
+    // This is just UI for now
+    alert("Một email đặt lại mật khẩu đã được gửi đến địa chỉ email của bạn");
+    router.push("/sign-in");
   };
-
-  useEffect(() => {
-    if (currentUser) {
-      router.push("/");
-    }
-  }, [currentUser]);
 
   return (
     <KeyboardAvoidingView
@@ -58,28 +39,19 @@ export default function SignUpScreen() {
             style={styles.img}
             resizeMode="contain"
           />
-          <Text style={styles.title}>Đăng ký tài khoản</Text>
+          <Text style={styles.title}>Quên mật khẩu</Text>
+          <Text style={styles.subtitle}>
+            Vui lòng nhập email của bạn để đặt lại mật khẩu
+          </Text>
 
           <View style={styles.formInput}>
             <TextInput
-              placeholder="Tên đăng nhập"
-              value={userName}
-              onChangeText={setUserName}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
               style={styles.input}
-            />
-            <TextInput
-              placeholder="Mật khẩu"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-              style={styles.input}
-            />
-            <TextInput
-              placeholder="Xác nhận mật khẩu"
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              style={styles.input}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
 
             <View style={styles.buttonContainer}>
@@ -92,7 +64,7 @@ export default function SignUpScreen() {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                onPress={handleSignUp}
+                onPress={handleResetPassword}
               >
                 <Text
                   style={{
@@ -101,13 +73,13 @@ export default function SignUpScreen() {
                     fontWeight: "bold",
                   }}
                 >
-                  Đăng ký
+                  Gửi yêu cầu
                 </Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.linkContainer}>
-              <Text style={styles.linkText}>Đã có tài khoản? </Text>
+              <Text style={styles.linkText}>Nhớ mật khẩu? </Text>
               <Link href="/sign-in" asChild>
                 <TouchableOpacity>
                   <Text style={styles.link}>Đăng nhập</Text>
@@ -115,10 +87,6 @@ export default function SignUpScreen() {
               </Link>
             </View>
           </View>
-
-          {status === "loading" && <Text>Đang xử lý...</Text>}
-          {error && <Text style={styles.error}>{error}</Text>}
-          {passwordError && <Text style={styles.error}>{passwordError}</Text>}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -146,7 +114,13 @@ const styles = StyleSheet.create({
     color: "#FF6633",
     fontSize: 24,
     fontWeight: "600",
-    marginBottom: 40,
+    marginBottom: 16,
+  },
+  subtitle: {
+    color: "#666",
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 32,
   },
   formInput: {
     width: "100%",
@@ -181,10 +155,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#FF6633",
     fontWeight: "600",
-  },
-  error: {
-    color: "red",
-    marginTop: 10,
-    textAlign: "center",
   },
 });
