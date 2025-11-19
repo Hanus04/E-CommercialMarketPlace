@@ -54,14 +54,13 @@ export const signUp = createAsyncThunk<
   { userName: string; password: string },
   { rejectValue: string }
 >("user/signUp", async ({ userName, password }, { rejectWithValue }) => {
-  // Check if username already exists
+  
   const checkUser = await fetch(`${USERS_URL}?userName=${userName}`);
   const existingUsers = await checkUser.json();
   if (existingUsers.length > 0) {
     return rejectWithValue("Tên đăng nhập đã tồn tại");
   }
 
-  // Create new user
   const res = await fetch(USERS_URL, {
     method: "POST",
     headers: {

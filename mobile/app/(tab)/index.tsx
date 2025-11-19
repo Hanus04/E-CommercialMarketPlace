@@ -70,9 +70,9 @@ export default function HomeScreen() {
             </TouchableOpacity>
             <Text style={styles.headerTitle}>All Deals</Text>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             <CartIcon />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/(tab)/account")}>
               <Image
                 source={{
                   uri: "https://randomuser.me/api/portraits/women/44.jpg",

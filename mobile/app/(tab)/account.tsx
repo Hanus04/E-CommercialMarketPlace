@@ -5,17 +5,41 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Alert,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { signOut } from "@/features/user/userSlice";
 
 export default function AccountScreen() {
   const user = useSelector((state: RootState) => state.user.currentUser);
+  const dispatch = useDispatch();
   const router = useRouter();
 
   if (!user) return null;
+
+  const handleSignOut = () => {
+    Alert.alert(
+      "Xác nhận đăng xuất",
+      "Bạn có chắc chắn muốn đăng xuất không?",
+      [
+        {
+          text: "Hủy",
+          style: "cancel",
+        },
+        {
+          text: "Đăng xuất",
+          onPress: () => {
+            dispatch(signOut());
+            router.replace("/(auth)/sign-in");
+          },
+          style: "destructive",
+        },
+      ]
+    );
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -67,10 +91,7 @@ export default function AccountScreen() {
       </TouchableOpacity>
 
       {/* ✅ Logout */}
-      <TouchableOpacity
-        style={styles.logoutBtn}
-        onPress={() => router.replace("/(auth)/sign-in")}
-      >
+      <TouchableOpacity style={styles.logoutBtn} onPress={handleSignOut}>
         <Text style={styles.logoutText}>Đăng xuất</Text>
       </TouchableOpacity>
     </ScrollView>
